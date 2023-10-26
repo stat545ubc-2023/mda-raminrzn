@@ -1,6 +1,6 @@
 ---
 title: "Mini Data Analysis Milestone 2"
-output: html_document
+output: github_document
 ---
 
 *To complete this milestone, you can either edit [this `.rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
@@ -99,7 +99,7 @@ Make sure it's clear what research question you are doing each operation for!
 
 #Q1- Is there a relationship between the number of storeys in apartment buildings and the presence of air conditioning?
 
-#PART1: Here I'm going to compare the range, mean and maximum and minimum number of building storeys among buildings with and without air conditioning.
+#PART1 Summarizing: Here I'm going to compare the range, mean and maximum and minimum number of building storeys among buildings with and without air conditioning.
 
 # Create a new categorical variable
 apt_buildings <- apt_buildings %>%
@@ -122,7 +122,7 @@ summary_data <- apt_buildings %>%
 # Display the summary statistics in a tibble
 print(summary_data)
 
-#PART2:Here I have created three different histograms Showing the frequency of apartments with various number of storeys, separated based on If they have air-conditioning or not. In my opinion, the histogram with medium bins (bandwidth=10), as it does not emphasize or minimize a certain number of storeys as seen in the "small bin" and "large bin" histograms and provides a clearer picture of the general distribution of the data. this can help identify central tendencies without getting lost in details.
+#PART2 Graphing :Here I have created three different histograms Showing the frequency of apartments with various number of storeys, separated based on If they have air-conditioning or not. In my opinion, the histogram with medium bins (bandwidth=10), as it does not emphasize or minimize a certain number of storeys as seen in the "small bin" and "large bin" histograms and provides a clearer picture of the general distribution of the data. this can help identify central tendencies without getting lost in details.
 
 # Create a histogram with small bins and facet by air conditioning status
 ggplot(apt_buildings, aes(x = no_of_storeys, fill = air_conditioning_group)) +
@@ -162,7 +162,7 @@ ggplot(apt_buildings, aes(x = no_of_storeys, fill = air_conditioning_group)) +
 ```{r}
 #Q2: Is having a balcony correlated with an apartment building being non-smoking or not?
 
-#PART1: Computing the proportion and counts of having a balcony across the groups of being non-smoking or not.
+#PART1 Summarizing: Computing the proportion and counts of having a balcony across the groups of being non-smoking or not.
 
 # Convert 'balconies' column to a factor with specific levels
 apt_buildings$balconies <- factor(apt_buildings$balconies, levels = c("YES", "NO"))
@@ -195,10 +195,10 @@ results_tibble <- tibble(
                              smoking_balcony_count / smoking_total_count, NA)
 )
 
-# Print the results tibble
+# Print 
 print(results_tibble)
 
-#PART2: This graph visualizes the count of properties with and without balconies for both non-smoking and smoking groups. There are two geom layers: The first  creates the bars representing the counts. The second layer adds text labels to the top of the bars to display the count for each category.
+#PART2 Graphing: This graph visualizes the count of properties with and without balconies for both non-smoking and smoking groups. There are two geom layers: The first  creates the bars representing the counts. The second layer adds text labels to the top of the bars to display the count for each category.
 
 # Create a data frame to calculate counts
 data_summary <- apt_buildings %>%
@@ -220,7 +220,7 @@ ggplot(data_summary, aes(x = `non-smoking_building`, y = count, fill = balconies
 ```
 ```{r}
 #Q3: Can we identify any patterns in the amenities offered by apartment buildings based on their age?
-#PART1: I created two new variables. First one creating an amenity score, based on a set of amenities that each building could have. Second, a variable categorizing the buildings into new, medium aged, and old compared to other buildings in this dataset, That is by dividing the data set into 3 quantiles of 0-25%, 25-75%, 75-100%. This would help me to answer the current question easier.
+#PART1 Summarizing: I created two new variables. First one creating an amenity score, based on a set of amenities that each building could have. Second, a variable categorizing the buildings into new, medium aged, and old. That is by dividing the data set into 3 parts newer than 10, 11-30, and older than 30 years of age. This would help me to answer the current question easier.
 
 # List of amenities to consider
 amenities_to_count <- c(
@@ -239,7 +239,7 @@ amenities_to_count <- c(
   "emergency_power"
 )
 
-# Convert the specified variables to factor using dplyr functions
+# Convert the = variables to factor
 apt_buildings <- apt_buildings %>%
   mutate(across(all_of(amenities_to_count), as.factor))
 
@@ -247,7 +247,7 @@ apt_buildings <- apt_buildings %>%
 apt_buildings <- apt_buildings %>%
   mutate(Amenity_Score = rowSums(select(., all_of(amenities_to_count)) != "NO"))
 
-# View the data frame with the new Amenity_Score variable
+# View 
 head(apt_buildings)
 
 
@@ -266,7 +266,7 @@ apt_buildings <- apt_buildings %>%
 head(apt_buildings)
 
 
-#PART2: 
+#PART2 Graphing: In this section we graph the amenity score categorized by each age group, with the addition of display error bars as an additional layer for each of the categories.
 
 # Calculate the mean amenity score for each age category
 mean_amenity_by_age <- apt_buildings %>%
@@ -296,7 +296,7 @@ ggplot(mean_amenity_by_age, aes(x = Building_Age_Category, y = Mean_Amenity_Scor
 ```{r}
 #Q4: Do apartment buildings with more amenities tend to have a higher number of units?
 
-#PART1: 
+#PART1 Summarizing: 
 # Categorize Amenity Score into low, medium, and high number of amenities buildings
 apt_buildings <- apt_buildings %>%
   mutate(Amenity_Score_Category = case_when(
@@ -306,7 +306,7 @@ apt_buildings <- apt_buildings %>%
   ))
 
 
-# Calculate summary statistics for number of units based on number of amenity categories
+# Calculate summary  for number of units based on number of amenity categories
 summary_data <- apt_buildings %>%
   group_by(Amenity_Score_Category) %>%
   summarise(
@@ -318,7 +318,7 @@ summary_data <- apt_buildings %>%
 
 print(summary_data)
 
-#PART2: 
+#PART2 Graphing: 
 
 apt_buildings %>%
   ggplot(aes(x = log10(no_of_units), y = Amenity_Score)) +
@@ -339,7 +339,7 @@ Based on the operations that you've completed, how much closer are you to answer
 
 <!------------------------- Write your answer here ---------------------------->
 
-Based on my current findings, I am closer to answering all four of my research questions,Considering that I have observed correlations for all the initial hypotheses I had. Although, more refinements can be made on each question, the current setup seems to have been adeqaute in getting answers. Questions three and four are the most interesting. As graphs from Q3 show that the newer builds of apartments do infact have more amenities, proving we are continuously seeking more comfort and Q4 shows, as the number of occupants is increased in each building, we see a trend of increased amenities, making it more accessible to everyone.
+Based on my current findings, I am closer to answering all four of my research questions,considering that I have observed correlations for all the initial hypotheses I had. Although, more refinements can be made on each question, the current setup seems to have been adequate in getting answers. Questions three and four are the most interesting. As graphs from Q3 show that the newer builds of apartments do in fact have more amenities, proving we are continuously seeking more comfort and Q4 shows, as the number of occupants is increased in each building, we see a trend of increased amenities, making it more accessible to everyone.
 
 <!----------------------------------------------------------------------------->
 
@@ -361,7 +361,7 @@ Based on the definition above, can you identify if your data is tidy or untidy? 
 
 The database I am working with is Apartment Buildings, with regards to the observations in the dataset, this data is tidy. Here I will explore 8 of the variables.
 
-id: This column represents seemingly unique identification numbers for each of the apartments.
+id: This column represents unique identification numbers for each of the apartments.
 air_conditioning: This column shows the type of air-conditioning each apartment may have, this variable is stored as a factor.
 amenities: The column names the type of amenity each apartment may have, stored as characters.
 balcony, exterior_fire_escape, fire_alarm, garbage_chutes and intercom: these variables are binary variables, saved as factor, and assess the availability of a certain amenity in the apartment.
@@ -387,13 +387,13 @@ glimpse(apt_buildings)
 
 #After Un-Tidying
 apt_buildings_ut <- pivot_longer(apt_buildings, 
-                       cols = air_conditioning,  # Specify the column to pivot
-                       names_to = "air_conditioning_row",  # New row variable name
-                       values_to = "air_conditioning_value",  # New value variable name
+                       cols = air_conditioning,  
+                       names_to = "air_conditioning_row",  
+                       values_to = "air_conditioning_value",
                        
 )
 
-# Print the resulting data frame
+ 
 glimpse(apt_buildings_ut)
 
 ```
@@ -406,7 +406,7 @@ apt_buildings_t <- pivot_wider(apt_buildings_ut,
                            values_from = "air_conditioning_value"  
 )
 
-# The resulting data frame (original state)
+
 glimpse(apt_buildings_t)
 
 ```
@@ -439,6 +439,48 @@ Now, try to choose a version of your data that you think will be appropriate to 
 (If it makes more sense, then you can make/pick two versions of your data, one for each research question.) 
 
 <!--------------------------- Start your work below --------------------------->
+
+```{r}
+
+#I will select the variables needed to answer any of the two research question, as well as keeping "id", to be able to match in the future if required.
+
+apt_buildings_spec <- apt_buildings %>%
+  select(
+    Building_Age_Category,
+    Amenity_Score_Category,
+    Amenity_Score,
+    air_conditioning_group,
+    cooling_room,
+    no_of_units,
+    "non-smoking_building",
+    emergency_power,
+    no_of_storeys,
+    sprinkler_system,
+    pets_allowed,
+    locker_or_storage_room,
+    laundry_room,
+    intercom,
+    garbage_chutes,
+    fire_alarm,
+    exterior_fire_escape,
+    barrier_free_accessibilty_entr,
+    balconies,
+    id
+  )
+
+#as this variable seems to have an outlier, I will filter to less than 4000 units
+apt_buildings_spec_fil <- apt_buildings_spec %>%
+  filter(no_of_units < 4000)
+
+# bring id to top of variable list
+apt_buildings_spec_fil_arranged <- apt_buildings_spec_fil %>%
+  select(id, everything())
+
+head(apt_buildings_spec_fil_arranged)
+```
+
+
+<!----------------------------------------------------------------------------->
 
 # Task 3: Modelling
 
@@ -483,14 +525,13 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 
 <!-------------------------- Start your work below ---------------------------->
 
-The following summarizes the regression coefficients and associated statistics for the modelin a tibble using broom. The results indicate that as "Building_Age" increases, "Amenity_Score" tends to decrease. The p-value for "Building_Age" is also very close to zero, indicating that it is highly statistically significant. 
+The following summarizes the regression coefficients and associated statistics for the model, in a tibble using broom. The results indicate that as "Building_Age" increases, "Amenity_Score" tends to decrease. The p-value for "Building_Age" is also very close to zero, indicating that it is highly statistically significant. 
 
 ```{r}
 
 library(broom)
 predictions <- tidy(model)
 
-# Print the predictions
 print(predictions)
 
 ```
